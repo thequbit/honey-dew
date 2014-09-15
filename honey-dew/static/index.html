@@ -1,0 +1,134 @@
+<html>
+<head>
+
+    <style>
+    
+        body {
+            background-color: #333399;
+            color: #DDD;
+            font-family: Verdana, serif;
+        }
+    
+        .site-wrapper {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .header {
+            width: 250px;
+            margin: auto;
+        }
+        
+        .top-header {
+            color: #DDD;
+            font-size: 275%;
+            width: 250px;
+        }
+        
+        .top-header-sub {
+            color: #DDD;
+            font-size: 130%;
+            width: 250px;
+        }
+        
+        .login-box {
+            background-color: #336699;
+            border: 1px solid #333;
+            border-radius: 7px;
+            width: 275px;
+            height: 200px;
+            min-height: 200px;
+            min-width: 200px;
+            margin: auto;
+            margin-top: 50px;
+            padding: 15px 15px 15px 15px;
+            display: none;
+        }
+        
+        .text-input {
+            margin-left: 5px;
+            background-color: #DDD;
+            color: #111;
+            font-size: 150%;
+            padding: 10px 10px 10px 10px;
+            border: 0px;
+            border-radius: 3px;
+        }
+    
+        .label-text {
+            font-size: 200%;
+        }
+        
+        #login-username {
+            margin-left: 5px;
+        }
+        
+        #login-password {
+            margin-left: 5px;
+        }
+    
+    </style>
+
+</head>
+<body>
+
+    <div id="site-wrapper" class="site-wrapper">
+    
+        <div id="header" class="header">
+            <div id="top-header" class="top-header">
+                honey dew
+            </div>
+            <div id="top-header-sub" class="top-header-sub">
+                a simple task manger
+            </div>
+        </div>
+        
+        <div id="login-box" class="login-box">
+            <div class="label-text">Username:</div>
+            <input id="login-username" type="text" class="text-input"></text></br>
+            
+            <div class="label-text">Password:</div>
+            <input id="login-password" type="password" class="text-input"></text>
+        </div>
+    
+    </div>
+
+    <script src="jquery-1.11.1.js"></script>
+    <script>
+    
+        $("#login-username").bind("keypress", {}, login_key_press);
+        $("#login-password").bind("keypress", {}, login_key_press);
+        function login_key_press(e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code == 13) { 
+                e.preventDefault();
+                do_login();
+            }
+        };
+    
+        function do_login() {
+            username = encodeURIComponent($('#login-username').val());
+            password = encodeURIComponent($('#login-password').val());
+            url = "login.json?username=" + username + "&password=" & password;
+            $.getJSON( url, function(data) {
+                console.log(data);
+                localStorage.setItem("token", data.token);
+                
+                $('#login-box').hide();
+                
+            });
+        }
+    
+        function check_token() {
+            token = localStorage.getItem("token"); 
+            if ( token == undefined || token == null ) {
+                $('#login-box').show();
+            }
+        }
+        
+        check_token();
+        
+    </script>
+
+</body>
+</html>
