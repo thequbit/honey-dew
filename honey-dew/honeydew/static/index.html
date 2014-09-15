@@ -66,6 +66,20 @@
         #login-password {
             margin-left: 5px;
         }
+
+        .tasks {
+            margin: 5px 5px 5px 5px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+
+        .task-title {
+            font-size: 100%;
+        }
+
+        .tasks-content {
+            
+        }
     
     </style>
 
@@ -105,16 +119,33 @@
                 do_login();
             }
         };
+
+        function get_tasks() {
+            token = localStorage.getItem("token");w
+            url = "/get_tasks?token=" + token;
+            $.getJSON( url, function( data ) {
+                html = '';
+                for(var i=0;i<data.tasks.length;i++) {
+                    html += '<div class="task-wrapper">';
+                    html += '<div class="task-title">' + data.tasks[i].title + '</div>';
+                    html += '<div class="task-contents">' + data.tasks[i].contents + '</div>';
+                    html += '</div>';
+                }
+            }
+        }
+
     
         function do_login() {
             username = encodeURIComponent($('#login-username').val());
             password = encodeURIComponent($('#login-password').val());
-            url = "login.json?username=" + username + "&password=" & password;
+            var url = "/login.json?username=" + username + "&password=" + password;
             $.getJSON( url, function(data) {
                 console.log(data);
-                localStorage.setItem("token", data.token);
-                
-                $('#login-box').hide();
+                if ( data.success == true ) {
+                    localStorage.setItem("token", data.token);
+                    $('#login-box').hide();
+                    get_tasks();
+                }
                 
             });
         }
